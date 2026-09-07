@@ -33,7 +33,13 @@ import {
 } from "lucide-react";
 
 export default function AdminDashboardPage() {
-  const { language, isUrdu } = useI18n();
+  const { language } = useI18n();
+  const isUrdu = false;
+
+  useEffect(() => {
+    document.documentElement.dir = "ltr";
+    document.documentElement.lang = "en";
+  }, []);
 
   // Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState(false);
