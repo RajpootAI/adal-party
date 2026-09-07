@@ -21,6 +21,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid admin credentials." }, { status: 401 });
   }
 
+  if (process.env.ADMIN_PASSWORD && password === process.env.ADMIN_PASSWORD) {
+    return NextResponse.json({
+      accessToken: process.env.ADMIN_SECRET_KEY || "adal2026admin",
+      user: { email: normalizedEmail },
+    });
+  }
+
   const supabase = createClient(url, anonKey, { auth: { persistSession: false } });
   const { data, error } = await supabase.auth.signInWithPassword({ email: normalizedEmail, password });
 
