@@ -25,6 +25,9 @@ export async function POST(req: NextRequest) {
   const { data, error } = await supabase.auth.signInWithPassword({ email: normalizedEmail, password });
 
   if (error || !data.session) {
+    if (error?.message.toLowerCase().includes("confirm")) {
+      return NextResponse.json({ error: "Please confirm your admin email address in Supabase before signing in." }, { status: 401 });
+    }
     return NextResponse.json({ error: "Invalid admin credentials." }, { status: 401 });
   }
 
