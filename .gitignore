@@ -1,0 +1,23 @@
+# Node & Next.js
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# Environment Files
+.env
+.env.production
+*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS & Editor Files
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/mcp.json
+.idea/
