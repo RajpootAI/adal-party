@@ -79,10 +79,16 @@ export default function AdminDashboardPage() {
 
     const accessToken = sessionStorage.getItem("pap_admin_token");
     if (accessToken) {
-      fetch("/api/membership", { headers: { Authorization: `Bearer ${accessToken}` } })
+      fetch("/api/admin", { headers: { Authorization: `Bearer ${accessToken}` } })
         .then(async (res) => (res.ok ? res.json() : null))
         .then((data) => {
-          if (data?.applications) setApplications(data.applications);
+          if (!data) return;
+          if (data.applications) setApplications(data.applications);
+          if (data.volunteers) setVolunteers(data.volunteers);
+          if (data.donations) setDonations(data.donations);
+          if (data.messages) setMessages(data.messages);
+          if (data.news) setNews(data.news);
+          if (data.settings) setSiteSettings({ ...partyStore.getSiteSettings(), ...data.settings });
         })
         .catch(() => undefined);
     }
@@ -156,11 +162,11 @@ export default function AdminDashboardPage() {
     link.click();
   };
 
-  const handleCreateNews = (e: React.FormEvent) => {
+  const handleCreateNews = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newsTitleEn || !newsTitleUr) return;
 
-    partyStore.addNews({
+    const article = {
       slug: newsTitleEn.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 60),
       titleEn: newsTitleEn,
       titleUr: newsTitleUr,
@@ -174,7 +180,14 @@ export default function AdminDashboardPage() {
       coverImage: "/logo.jpg",
       isFeatured: false,
       status: "Published",
+    };
+    const accessToken = sessionStorage.getItem("pap_admin_token");
+    const response = await fetch("/api/admin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ entity: "news", data: article }),
     });
+    if (!response.ok) return;
 
     setShowAddNews(false);
     setNewsTitleEn("");
@@ -184,6 +197,30 @@ export default function AdminDashboardPage() {
     setNewsContentEn("");
     setNewsContentUr("");
     refreshData();
+  };
+
+  const handleSaveSiteSettings = async () => {
+    const accessToken = sessionStorage.getItem("pap_admin_token");
+    const response = await fetch("/api/admin", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ entity: "settings", data: siteSettings }),
+    });
+    if (response.ok) refreshData();
+  };
+
+  const handleSaveMember = async () => {
+    if (!selectedApp) return;
+    const accessToken = sessionStorage.getItem("pap_admin_token");
+    const response = await fetch("/api/admin", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ entity: "membership", id: selectedApp.id, data: selectedApp }),
+    });
+    if (response.ok) {
+      setSelectedApp(null);
+      refreshData();
+    }
   };
 
   // If unauthenticated: render login screen
@@ -599,27 +636,27 @@ export default function AdminDashboardPage() {
                       </div>
                       <div>
                         <span className="text-gray-500 font-medium">Primary Phone:</span>
-                        <p className="font-mono font-bold text-gray-900">{selectedApp.phone}</p>
+                        <input value={selectedApp.phone} onChange={(e) => setSelectedApp({ ...selectedApp, phone: e.target.value })} className="mt-1 w-full rounded border border-gray-300 p-2 font-mono text-xs" />
                       </div>
                       <div>
                         <span className="text-gray-500 font-medium">Email:</span>
-                        <p className="text-gray-800">{selectedApp.email || "Not Provided"}</p>
+                        <input value={selectedApp.email || ""} onChange={(e) => setSelectedApp({ ...selectedApp, email: e.target.value })} className="mt-1 w-full rounded border border-gray-300 p-2 text-xs" />
                       </div>
                       <div>
                         <span className="text-gray-500 font-medium">Residency:</span>
-                        <p className="text-gray-800">{selectedApp.district}, {selectedApp.province}</p>
+                        <div className="mt-1 flex gap-2"><input value={selectedApp.district} onChange={(e) => setSelectedApp({ ...selectedApp, district: e.target.value })} className="w-1/2 rounded border border-gray-300 p-2 text-xs" /><input value={selectedApp.province} onChange={(e) => setSelectedApp({ ...selectedApp, province: e.target.value })} className="w-1/2 rounded border border-gray-300 p-2 text-xs" /></div>
                       </div>
                       <div className="col-span-2">
                         <span className="text-gray-500 font-medium">Full Address:</span>
-                        <p className="text-gray-800">{selectedApp.address}</p>
+                        <textarea value={selectedApp.address} onChange={(e) => setSelectedApp({ ...selectedApp, address: e.target.value })} className="mt-1 w-full rounded border border-gray-300 p-2 text-xs" rows={2} />
                       </div>
                       <div>
                         <span className="text-gray-500 font-medium">Profession:</span>
-                        <p className="text-gray-800">{selectedApp.profession || "Not specified"}</p>
+                        <input value={selectedApp.profession || ""} onChange={(e) => setSelectedApp({ ...selectedApp, profession: e.target.value })} className="mt-1 w-full rounded border border-gray-300 p-2 text-xs" />
                       </div>
                       <div>
                         <span className="text-gray-500 font-medium">Education:</span>
-                        <p className="text-gray-800">{selectedApp.education || "Not specified"}</p>
+                        <input value={selectedApp.education || ""} onChange={(e) => setSelectedApp({ ...selectedApp, education: e.target.value })} className="mt-1 w-full rounded border border-gray-300 p-2 text-xs" />
                       </div>
                       <div className="col-span-2">
                         <span className="text-gray-500 font-medium">Solemn Oath Acceptance:</span>
@@ -635,6 +672,9 @@ export default function AdminDashboardPage() {
 
                     {/* Change Status Controls */}
                     <div className="pt-4 border-t border-gray-200 space-y-3">
+                      <button onClick={handleSaveMember} className="rounded-lg bg-adal-green-900 px-4 py-2 text-xs font-bold text-adal-gold-300 hover:bg-adal-green-800">
+                        Save Member Details
+                      </button>
                       <label className="block text-xs font-bold text-gray-700">
                         Update Application Status & Add Staff Review Note:
                       </label>
@@ -984,10 +1024,7 @@ export default function AdminDashboardPage() {
                 <div className="pt-4 border-t border-gray-100 flex justify-end">
                   <button
                     type="button"
-                    onClick={() => {
-                      partyStore.updateSiteSettings(siteSettings);
-                      alert(isUrdu ? "سیٹنگز محفوظ ہو گئیں!" : "Site settings updated successfully!");
-                    }}
+                    onClick={handleSaveSiteSettings}
                     className="rounded-lg bg-adal-green-900 px-5 py-2 text-xs font-bold text-adal-gold-300 hover:bg-adal-green-800 shadow"
                   >
                     Save Changes

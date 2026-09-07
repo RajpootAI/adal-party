@@ -123,6 +123,7 @@ ADMIN_SECRET_KEY=
 ### Vercel deployment
 
 Use [`.env.vercel.example`](./.env.vercel.example) as the variable checklist. Add each value in Vercel under **Project Settings > Environment Variables** for Production and Preview. Do not commit `.env.local`, `.env.production`, or any file containing real secrets. After adding the variables, redeploy the project so the server-side Supabase connection and admin login are available.
+The admin console reads and writes member applications, site settings, news, volunteers, donations, and contact messages through authenticated server APIs. Changes made in the console are stored in Supabase and are available to the live site after its next request.
 
 ---
 

@@ -74,6 +74,29 @@ export async function updateApplicationStatus(id: string, status: MembershipAppl
   return true;
 }
 
+export async function updateMembershipApplication(id: string, data: Partial<Omit<MembershipApplication, "id" | "applicationNumber" | "createdAt">>) {
+  if (!isSupabaseConfigured) {
+    const current = partyStore.getApplications().find((application) => application.id === id);
+    if (!current) return false;
+    Object.assign(current, data, { updatedAt: new Date().toISOString() });
+    return true;
+  }
+  const updates: Record<string, unknown> = {};
+  const fields: Record<string, string> = {
+    fullName: "full_name", cnic: "cnic", phone: "phone", mobile: "mobile", email: "email",
+    address: "address", city: "city", district: "district", province: "province", profession: "profession",
+    education: "education", membershipType: "membership_type", commitmentAccepted: "commitment_accepted",
+    signatureReference: "signature_reference", status: "status", adminNotes: "admin_notes",
+  };
+  for (const [key, column] of Object.entries(fields)) {
+    if (data[key as keyof typeof data] !== undefined) updates[column] = data[key as keyof typeof data];
+  }
+  updates.updated_at = new Date().toISOString();
+  const { error } = await getSupabase().from("membership_applications").update(updates).eq("id", id);
+  if (error) throw error;
+  return true;
+}
+
 export async function submitVolunteer(data: Omit<Volunteer, "id" | "status" | "createdAt">) {
   if (!isSupabaseConfigured) return partyStore.addVolunteer(data);
   const { data: row, error } = await getSupabase().from("volunteers").insert({ full_name: data.fullName, email: data.email, phone: data.phone, city: data.city, district: data.district, province: data.province, area_of_interest: data.areaOfInterest, availability: data.availability, message: data.message }).select().single();
