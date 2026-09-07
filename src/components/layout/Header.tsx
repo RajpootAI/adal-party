@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useI18n } from "@/lib/i18nContext";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { SearchModal } from "../ui/SearchModal";
+import { useSiteSettings } from "@/lib/siteSettings";
 import {
   Menu,
   X,
@@ -19,6 +20,7 @@ import {
 
 export function Header() {
   const { language, isUrdu, t } = useI18n();
+  const siteSettings = useSiteSettings();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -46,11 +48,11 @@ export function Header() {
           <div className="flex items-center gap-2 min-w-0 overflow-hidden">
             <span className="inline-block h-2 w-2 rounded-full bg-adal-gold-400 animate-pulse flex-shrink-0"></span>
             <span className="font-medium tracking-wide text-adal-gold-300 truncate">
-              {isUrdu ? "پاکستان عدل پارٹی — قومی منشور 2026" : "Pakistan Adal Party — National Manifesto 2026"}
+              {isUrdu ? `${siteSettings.partyNameUr} — قومی منشور 2026` : `${siteSettings.partyNameEn} — National Manifesto 2026`}
             </span>
             <span className="hidden md:inline text-gray-400 flex-shrink-0">|</span>
             <span className="hidden md:inline text-gray-300 italic truncate">
-              {isUrdu ? "امن، انصاف، ترقی اور مساوات سب کے لیے" : "Peace, Justice, Development and Equality for All"}
+              {isUrdu ? siteSettings.taglineUr : siteSettings.taglineEn}
             </span>
           </div>
 
@@ -104,10 +106,10 @@ export function Header() {
               </div>
               <div className="flex flex-col min-w-0">
                 <span className="text-base sm:text-xl lg:text-2xl font-black tracking-tight text-white font-urdu urdu-editorial leading-tight truncate">
-                  پاکستان عدل پارٹی
+                  {siteSettings.partyNameUr}
                 </span>
                 <span className="text-[10px] sm:text-xs font-semibold tracking-wider text-adal-gold-400 uppercase truncate">
-                  Pakistan Adal Party
+                  {siteSettings.partyNameEn}
                 </span>
               </div>
             </Link>
@@ -201,7 +203,7 @@ export function Header() {
             <div className="flex items-center justify-between pb-4 border-b border-adal-green-800">
               <div className="flex items-center gap-2">
                 <Image src="/logo.jpg" alt="Logo" width={32} height={32} className="rounded-full bg-white p-0.5 flex-shrink-0" />
-                <span className="font-urdu font-bold text-white text-base">پاکستان عدل پارٹی</span>
+                <span className="font-urdu font-bold text-white text-base">{siteSettings.partyNameUr}</span>
               </div>
               <LanguageSwitcher />
             </div>

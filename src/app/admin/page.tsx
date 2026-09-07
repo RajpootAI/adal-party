@@ -987,6 +987,22 @@ export default function AdminDashboardPage() {
               <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                   <div>
+                    <label className="block font-bold text-gray-700 mb-1">Party Name (English)</label>
+                    <input type="text" value={siteSettings.partyNameEn} onChange={(e) => setSiteSettings({ ...siteSettings, partyNameEn: e.target.value })} className="w-full rounded-lg border border-gray-300 p-2.5 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Party Name (Urdu)</label>
+                    <input type="text" value={siteSettings.partyNameUr} onChange={(e) => setSiteSettings({ ...siteSettings, partyNameUr: e.target.value })} className="w-full rounded-lg border border-gray-300 p-2.5 font-urdu focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Tagline (English)</label>
+                    <input type="text" value={siteSettings.taglineEn} onChange={(e) => setSiteSettings({ ...siteSettings, taglineEn: e.target.value })} className="w-full rounded-lg border border-gray-300 p-2.5 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Tagline (Urdu)</label>
+                    <input type="text" value={siteSettings.taglineUr} onChange={(e) => setSiteSettings({ ...siteSettings, taglineUr: e.target.value })} className="w-full rounded-lg border border-gray-300 p-2.5 font-urdu focus:outline-none" />
+                  </div>
+                  <div>
                     <label className="block font-bold text-gray-700 mb-1">Official Party Email</label>
                     <input
                       type="text"

@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useI18n } from "@/lib/i18nContext";
-import { defaultSiteSettings } from "@/data/partyData";
+import { useSiteSettings } from "@/lib/siteSettings";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import {
   Scale,
@@ -20,6 +20,7 @@ import {
 
 export function Footer() {
   const { language, isUrdu, t } = useI18n();
+  const siteSettings = useSiteSettings();
 
   return (
     <footer className="bg-adal-green-950 text-gray-300 border-t-2 border-adal-gold-500/40 relative overflow-hidden">
@@ -43,22 +44,22 @@ export function Footer() {
               </div>
               <div>
                 <h3 className="font-urdu text-xl font-black text-white leading-tight">
-                  پاکستان عدل پارٹی
+                  {siteSettings.partyNameUr}
                 </h3>
                 <p className="text-xs font-semibold text-adal-gold-400 uppercase tracking-wider">
-                  Pakistan Adal Party
+                  {siteSettings.partyNameEn}
                 </p>
               </div>
             </div>
 
             <p className="text-xs leading-relaxed text-gray-400 font-urdu urdu-editorial">
-              "امن، انصاف، ترقی اور مساوات سب کے لیے" — ریاست کسی خاندان، جماعت یا طبقے کی جاگیر نہیں، پاکستان کے ہر شہری کی امانت ہے۔
+              "{siteSettings.taglineUr}" — ریاست کسی خاندان، جماعت یا طبقے کی جاگیر نہیں، پاکستان کے ہر شہری کی امانت ہے۔
             </p>
 
             <div className="pt-2 text-[11px] text-adal-gold-300/80 space-y-1 border-t border-adal-green-900">
               <p>
                 <span className="font-semibold">{isUrdu ? "الیکشن کمیشن رجسٹریشن:" : "ECP Registration:"}</span>{" "}
-                {defaultSiteSettings.electionCommissionRegNo}
+                {siteSettings.electionCommissionRegNo}
               </p>
               <p>
                 <span className="font-semibold">{isUrdu ? "قومی منشور:" : "Manifesto:"}</span> 2026–2036
@@ -165,18 +166,18 @@ export function Footer() {
               <div className="flex items-start gap-2.5">
                 <MapPin className="h-4 w-4 text-adal-gold-400 shrink-0 mt-0.5" />
                 <p className="leading-relaxed">
-                  {isUrdu ? defaultSiteSettings.officeAddressUr : defaultSiteSettings.officeAddressEn}
+                  {isUrdu ? siteSettings.officeAddressUr : siteSettings.officeAddressEn}
                 </p>
               </div>
 
               <div className="flex items-center gap-2.5">
                 <Mail className="h-4 w-4 text-adal-gold-400 shrink-0" />
-                <span className="font-mono text-gray-400">{defaultSiteSettings.officialEmail}</span>
+                <span className="font-mono text-gray-400">{siteSettings.officialEmail}</span>
               </div>
 
               <div className="flex items-center gap-2.5">
                 <Phone className="h-4 w-4 text-adal-gold-400 shrink-0" />
-                <span className="font-mono text-gray-400">{defaultSiteSettings.officialPhone}</span>
+                <span className="font-mono text-gray-400">{siteSettings.officialPhone}</span>
               </div>
 
               <div className="pt-3 border-t border-adal-green-900">
