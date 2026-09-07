@@ -101,7 +101,7 @@ Create or update `.env.local`:
 ```env
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
-# Supabase Credentials (Optional for local mode)
+# Supabase Credentials
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
@@ -115,8 +115,14 @@ PAYMENT_PROVIDER_KEY=
 PAYMENT_WEBHOOK_SECRET=
 
 # Admin Access Credentials
-ADMIN_SECRET_KEY=adal2026admin
+ADMIN_EMAIL=
+ADMIN_PASSWORD=
+ADMIN_SECRET_KEY=
 ```
+
+### Vercel deployment
+
+Use [`.env.vercel.example`](./.env.vercel.example) as the variable checklist. Add each value in Vercel under **Project Settings > Environment Variables** for Production and Preview. Do not commit `.env.local`, `.env.production`, or any file containing real secrets. After adding the variables, redeploy the project so the server-side Supabase connection and admin login are available.
 
 ---
 
