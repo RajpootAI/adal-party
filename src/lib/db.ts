@@ -12,6 +12,7 @@ import { MembershipApplication, Volunteer, Donation, ContactMessage, NewsArticle
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const publicSupabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseKey);
 
@@ -163,6 +164,14 @@ export async function createNewsArticle(article: Omit<NewsArticle, "id">) {
 export async function fetchSiteSettings() {
   if (!isSupabaseConfigured) return partyStore.getSiteSettings();
   const { data, error } = await getSupabase().from("site_settings").select("key, value");
+  if (error) throw error;
+  return Object.fromEntries((data || []).map((setting) => [setting.key, setting.value]));
+}
+
+export async function fetchPublicSiteSettings() {
+  if (!supabaseUrl || !publicSupabaseKey) return partyStore.getSiteSettings();
+  const supabase = createClient(supabaseUrl, publicSupabaseKey, { auth: { persistSession: false } });
+  const { data, error } = await supabase.from("site_settings").select("key, value");
   if (error) throw error;
   return Object.fromEntries((data || []).map((setting) => [setting.key, setting.value]));
 }

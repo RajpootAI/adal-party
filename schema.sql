@@ -206,6 +206,12 @@ CREATE TABLE IF NOT EXISTS site_settings (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
 );
 
+ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow public read of site settings" ON site_settings;
+CREATE POLICY "Allow public read of site settings" ON site_settings
+    FOR SELECT TO anon, authenticated
+    USING (true);
+
 -- 15. AUDIT LOGS
 CREATE TABLE IF NOT EXISTS audit_logs (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
