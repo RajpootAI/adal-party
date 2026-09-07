@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { useSiteSettings } from "@/lib/siteSettings";
 import { useI18n } from "@/lib/i18nContext";
 import {
   Heart,
@@ -16,6 +17,7 @@ import {
 } from "lucide-react";
 
 export default function DonatePage() {
+  const siteSettings = useSiteSettings();
   const { language, isUrdu, t } = useI18n();
 
   const presetAmounts = [2500, 5000, 10000, 25000, 50000, 100000];
@@ -129,11 +131,11 @@ export default function DonatePage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">{isUrdu ? "بینک کا نام:" : "Bank Name:"}</span>
-                  <span className="font-mono font-bold text-gray-900">[OFFICIAL DESIGNATED BANK NAME]</span>
+                  <span className="font-mono font-bold text-gray-900">{siteSettings.bankName}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">IBAN:</span>
-                  <span className="font-mono font-bold text-gray-900">[PK00BANK0000000000000000]</span>
+                  <span className="font-mono font-bold text-gray-900">{siteSettings.bankAccount}</span>
                 </div>
               </div>
 

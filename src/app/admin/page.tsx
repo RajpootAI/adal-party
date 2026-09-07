@@ -1022,6 +1022,47 @@ export default function AdminDashboardPage() {
                     />
                   </div>
 
+                  {([
+                    ["membershipEmail", "Membership Email"],
+                    ["mediaEmail", "Media Email"],
+                    ["whatsappNumber", "WhatsApp Number"],
+                    ["bankName", "Designated Bank Name"],
+                    ["bankAccount", "Bank Account / IBAN"],
+                    ["electionCommissionRegNo", "Election Commission Registration No."],
+                    ["facebookUrl", "Facebook URL"],
+                    ["twitterUrl", "X / Twitter URL"],
+                    ["youtubeUrl", "YouTube URL"],
+                    ["instagramUrl", "Instagram URL"],
+                    ["tiktokUrl", "TikTok URL"],
+                    ["whatsappUrl", "WhatsApp URL"],
+                    ["chairmanNameEn", "Chairman Name (English)"],
+                    ["chairmanNameUr", "Chairman Name (Urdu)"],
+                    ["secretaryGeneralNameEn", "Secretary General (English)"],
+                    ["secretaryGeneralNameUr", "Secretary General (Urdu)"],
+                    ["viceChairmanNameEn", "Vice Chairman (English)"],
+                    ["viceChairmanNameUr", "Vice Chairman (Urdu)"],
+                    ["secretaryInformationNameEn", "Secretary Information (English)"],
+                    ["secretaryInformationNameUr", "Secretary Information (Urdu)"],
+                    ["punjabPresidentNameEn", "Punjab President (English)"],
+                    ["punjabPresidentNameUr", "Punjab President (Urdu)"],
+                    ["sindhPresidentNameEn", "Sindh President (English)"],
+                    ["sindhPresidentNameUr", "Sindh President (Urdu)"],
+                    ["kpPresidentNameEn", "Khyber Pakhtunkhwa President (English)"],
+                    ["kpPresidentNameUr", "Khyber Pakhtunkhwa President (Urdu)"],
+                    ["balochistanPresidentNameEn", "Balochistan President (English)"],
+                    ["balochistanPresidentNameUr", "Balochistan President (Urdu)"],
+                  ] as const).map(([key, label]) => (
+                    <div key={key}>
+                      <label className="block font-bold text-gray-700 mb-1">{label}</label>
+                      <input
+                        type="text"
+                        value={siteSettings[key]}
+                        onChange={(e) => setSiteSettings({ ...siteSettings, [key]: e.target.value })}
+                        className="w-full rounded-lg border border-gray-300 p-2.5 font-mono focus:outline-none"
+                      />
+                    </div>
+                  ))}
+
                   <div className="sm:col-span-2">
                     <label className="block font-bold text-gray-700 mb-1">Office Address (English)</label>
                     <input

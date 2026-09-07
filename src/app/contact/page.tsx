@@ -4,11 +4,12 @@ import React, { useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useI18n } from "@/lib/i18nContext";
-import { defaultSiteSettings } from "@/data/partyData";
+import { useSiteSettings } from "@/lib/siteSettings";
 import { Mail, Phone, MapPin, CheckCircle2, AlertCircle, MessageSquare, Send, Globe } from "lucide-react";
 
 export default function ContactPage() {
   const { language, isUrdu, t } = useI18n();
+  const siteSettings = useSiteSettings();
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -85,7 +86,7 @@ export default function ContactPage() {
                         {isUrdu ? "دفتر کا پتہ" : "Office Address"}
                       </span>
                       <p className="text-gray-800 leading-relaxed font-mono">
-                        {isUrdu ? defaultSiteSettings.officeAddressUr : defaultSiteSettings.officeAddressEn}
+                        {isUrdu ? siteSettings.officeAddressUr : siteSettings.officeAddressEn}
                       </p>
                     </div>
                   </div>
@@ -96,8 +97,8 @@ export default function ContactPage() {
                       <span className="text-xs font-bold text-gray-500 uppercase block mb-0.5">
                         {isUrdu ? "سرکاری ای میل" : "Official Email"}
                       </span>
-                      <p className="text-gray-800 font-mono">{defaultSiteSettings.officialEmail}</p>
-                      <p className="text-gray-500 font-mono text-xs">{defaultSiteSettings.membershipEmail}</p>
+                      <p className="text-gray-800 font-mono">{siteSettings.officialEmail}</p>
+                      <p className="text-gray-500 font-mono text-xs">{siteSettings.membershipEmail}</p>
                     </div>
                   </div>
 
@@ -107,8 +108,8 @@ export default function ContactPage() {
                       <span className="text-xs font-bold text-gray-500 uppercase block mb-0.5">
                         {isUrdu ? "فون و واٹس ایپ" : "Phone & WhatsApp"}
                       </span>
-                      <p className="text-gray-800 font-mono">{defaultSiteSettings.officialPhone}</p>
-                      <p className="text-gray-500 font-mono text-xs">{defaultSiteSettings.whatsappNumber}</p>
+                      <p className="text-gray-800 font-mono">{siteSettings.officialPhone}</p>
+                      <p className="text-gray-500 font-mono text-xs">{siteSettings.whatsappNumber}</p>
                     </div>
                   </div>
                 </div>
@@ -119,9 +120,9 @@ export default function ContactPage() {
                     {isUrdu ? "سوشل میڈیا چینلز" : "Official Social Media"}
                   </span>
                   <div className="flex flex-wrap gap-2 text-xs font-mono text-gray-500">
-                    <span className="rounded bg-gray-100 px-2.5 py-1">[X / TWITTER]</span>
-                    <span className="rounded bg-gray-100 px-2.5 py-1">[FACEBOOK]</span>
-                    <span className="rounded bg-gray-100 px-2.5 py-1">[YOUTUBE]</span>
+                    <a href={siteSettings.twitterUrl} className="rounded bg-gray-100 px-2.5 py-1" target="_blank" rel="noreferrer">X / Twitter</a>
+                    <a href={siteSettings.facebookUrl} className="rounded bg-gray-100 px-2.5 py-1" target="_blank" rel="noreferrer">Facebook</a>
+                    <a href={siteSettings.youtubeUrl} className="rounded bg-gray-100 px-2.5 py-1" target="_blank" rel="noreferrer">YouTube</a>
                   </div>
                 </div>
               </div>

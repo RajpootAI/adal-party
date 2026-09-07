@@ -5,14 +5,30 @@ import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useI18n } from "@/lib/i18nContext";
+import { useSiteSettings } from "@/lib/siteSettings";
 import { leadershipMembers } from "@/data/partyData";
 import { Users, User, ShieldAlert, Award, ChevronRight, Lock } from "lucide-react";
 
 export default function LeadershipPage() {
   const { language, isUrdu, t } = useI18n();
+  const siteSettings = useSiteSettings();
   const [tierFilter, setTierFilter] = useState<string>("all");
 
-  const filteredMembers = leadershipMembers.filter((m) => {
+  const liveMembers = leadershipMembers.map((member, index) => {
+    const names = [
+      [siteSettings.chairmanNameEn, siteSettings.chairmanNameUr],
+      [siteSettings.secretaryGeneralNameEn, siteSettings.secretaryGeneralNameUr],
+      [siteSettings.viceChairmanNameEn, siteSettings.viceChairmanNameUr],
+      [siteSettings.secretaryInformationNameEn, siteSettings.secretaryInformationNameUr],
+      [siteSettings.punjabPresidentNameEn, siteSettings.punjabPresidentNameUr],
+      [siteSettings.sindhPresidentNameEn, siteSettings.sindhPresidentNameUr],
+      [siteSettings.kpPresidentNameEn, siteSettings.kpPresidentNameUr],
+      [siteSettings.balochistanPresidentNameEn, siteSettings.balochistanPresidentNameUr],
+    ][index];
+    return { ...member, nameEn: names[0], nameUr: names[1] };
+  });
+
+  const filteredMembers = liveMembers.filter((m) => {
     if (tierFilter === "all") return true;
     return m.tier === tierFilter;
   });
@@ -53,7 +69,7 @@ export default function LeadershipPage() {
                 </span>
               ) : (
                 <span>
-                  <strong>Institutional Transparency Notice:</strong> Per strict party compliance and ECP reporting guidelines, official office bearer profiles utilize standardized editable placeholders (e.g., [CHAIRMAN NAME]) until formal electoral certification by the Central Executive Council.
+                  <strong>Institutional Transparency Notice:</strong> Per strict party compliance and ECP reporting guidelines, official office bearer profiles remain editable until formal electoral certification by the Central Executive Council.
                 </span>
               )}
             </p>
@@ -104,7 +120,7 @@ export default function LeadershipPage() {
 
                     <div className="text-center">
                       <div className="inline-block rounded bg-amber-50 px-2 py-0.5 text-[10px] font-mono font-semibold text-amber-800 border border-amber-200 mb-2">
-                        [PLACEHOLDER]
+                        Pending verification
                       </div>
 
                       <h3 className="font-mono text-base font-bold text-adal-green-950">
